@@ -105,7 +105,7 @@ Adding the `next/image` component to the `/app/page.tsx`:
 import Image from "next/image";
 ```
 
-```html
+```typescript
   <Image
     src="/hero-desktop.png"
     width={1000}
@@ -115,7 +115,7 @@ import Image from "next/image";
   />
 ```
 
-```html 
+```typescript 
   <Image
     src="/hero-mobile.png"
     width={560}
