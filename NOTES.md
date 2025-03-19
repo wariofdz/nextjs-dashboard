@@ -1,4 +1,4 @@
-# **NOTES FROM NEXTJS TUTORIAL**
+# **Personal NOTES from NEXTJS Tutorial**
 
 <div id="topoftoc">
 
@@ -16,6 +16,12 @@
 11. [Adding Search and Pagination](#chapter11)
 12. [Mutating Data](#chapter12)
 13. [Handling Errors](#chapter13)
+
+<br/>
+
+***
+
+<br/>
 
 <div id='chapter1'/>
 
@@ -44,7 +50,7 @@ pnpm run dev
 ``` 
 and Next.js runs development server on port **3000**.
 
-<p align="right">:arrow_up: <a href=#topoftoc>Top</a></p>
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
 
 <div id='chapter2'/>
 
@@ -79,7 +85,7 @@ There may be cases where you may need to conditionally style an element based on
 ### Other styling solutions 
 We could use Sass or CSS-in-JS libraries such as [styled-jsx](https://github.com/vercel/styled-jsx), [styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components), and [emotion](https://github.com/vercel/next.js/tree/canary/examples/with-emotion).
 
-<p align="right"><a href=#topoftoc>Top</a></p>
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
 
 <div id='chapter3'/>
 
@@ -140,10 +146,11 @@ import Image from "next/image";
     alt="Screenshots of the dashboard prjoject showing mobile version"
   />
 ```
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
 
 <div id="chapter4" />
 
-# Creating Layouts and Pages
+# 4. Creating Layouts and Pages
 Topics we’ll cover:
 
 * Create the `dashboard` routes using file-system routing.
@@ -168,9 +175,11 @@ We import the `<SideNav />` component into the layout. It'll be a part of layout
 
 One of benefits of using layouts on Next.js is that on navigation, **only the page components update while the layout won't re-render**. This is called [partial rendering](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#4-partial-rendering). Without partial rendering, each navigation would cause the full page to re-render on the client. Rendering only the segment that changes reduces the amount of data transferred and execution time, leading to improved performance.
 
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
+
 <div id="chapter5" />
 
-# Navigating between Pages
+# 5. Navigating between Pages
 Topics we’ll cover:
 
 * How to use the `next/link` component.
@@ -197,15 +206,71 @@ A common UI pattern is to show an active link to indicate to the user what page 
 
 To do this, you need to get the user's current path from the URL. Next.js provides a hook called [usePathname()](https://nextjs.org/docs/app/api-reference/functions/use-pathname) that you can use to check the path and implement this pattern.
 
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
+
 <div id="chapter6" />
 
-# Setting Up your Database
+# 6. Setting Up your Database
 
 In this chapter, we could learn how to push our project to GitHub and create a Vercel account. 
 
 Further more details here, in the [tutorial](https://nextjs.org/learn/dashboard-app/setting-up-your-database). :smile:
 
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
+
 <div id="chapter7" />
 
-# Fetching Data
+# 7. Fetching Data
+Topics we'll cover:
 
+* Learn about some approaches to fetching data: APIs, ORMs, SQL, etc.
+* How Server Components can help you access back-end resources more securely.
+* What network waterfalls are.
+* How to implement parallel data fetching using a JavaScript Pattern.
+
+## Choosing how to fetch data
+
+### API layer
+
+APIs are an intermediary layer between your application code and database. You'd need an API in cases like fetching data from the client, to avoid exposing your DB secrets to the client.
+
+In Next.js, you can create API endpoints using [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers).
+
+### Database queries
+
+When you're creating a full-stack application, you'll also need to write logic to interact with your database. For relational databases as PostgreSQL, you can use SQL or ORM. You can use this when you fetch data on the server by **React Server Components**.
+
+### Using Server Components to fetch data
+
+By default, Next.js applications use [**React Server Components**](https://react.dev/reference/rsc/server-components).
+
+There are a few benefits to using them, like:
+
+* **Server Components** support JavaScript Promises, providing a solution for asynchronous tasks like data fetching natively. You can use **`async/await`** syntax without needing `useEffect`, `useState` or other data fetching libraries.
+* Server Components run on the server, so you can keep expensive data fetches and logic on the server, only sending the result to the client.
+* Since Server Components run on the server, you can query the database directly without an additional API layer. 
+
+### Using SQL
+
+In terms of fetching data, SQL allows you to write targeted queries to fetch and manipulate specific data. You can call `sql` anywhere on the server, like a Server Component.
+
+## What are request waterfalls?
+
+A **_waterfall_** refers to a sequence of network requests that depend on the completion of previous requests. In the case of data fetching, each request can only begin once the previous request has returned data. This behavior can also be unintentional and impact performance.
+
+## Parallel data fetching
+
+A common way to avoid waterfalls is to initiate all data requests at the same time - in parallel.
+
+In JavaScript, you can use the [`Promise.all()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) or [`Promise.allSettled()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled) functions to initiate all promises at the same time. 
+
+By using this pattern, you can:
+
+- Start executing all data fetches at the same time, which is faster than waiting for each request to complete in a waterfall.
+- Use a native JavaScript pattern that can be applied to any library or framework.
+
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
+
+<div id="chapter8" />
+
+# 8. Static and Dynamic Rendering
