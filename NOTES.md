@@ -1,9 +1,21 @@
 # **NOTES FROM NEXTJS TUTORIAL**
 
+<div id="topoftoc">
+
 # Table of Contents
 1. [Creating new project](#chapter1)
 2. [CSS Styling](#chapter2)
-3. [Optimizing fonts and images](#chapter3)
+3. [Optimizing Fonts and Images](#chapter3)
+4. [Creating Layouts and Pages](#chapter4)
+5. [Navigating between Pages](#chapter5)
+6. [Setting Up your Database](#chapter6)
+7. [Fetching Data](#chapter7)
+8. [Static and Dynamic Rendering](#chapter8)
+9. [Streaming](#chapter9)
+10. [Partial Prerendering](#chapter10)
+11. [Adding Search and Pagination](#chapter11)
+12. [Mutating Data](#chapter12)
+13. [Handling Errors](#chapter13)
 
 <div id='chapter1'/>
 
@@ -31,6 +43,8 @@ Execute on a terminal:
 pnpm run dev 
 ``` 
 and Next.js runs development server on port **3000**.
+
+<p align="right">:arrow_up: <a href=#topoftoc>Top</a></p>
 
 <div id='chapter2'/>
 
@@ -64,6 +78,8 @@ There may be cases where you may need to conditionally style an element based on
 
 ### Other styling solutions 
 We could use Sass or CSS-in-JS libraries such as [styled-jsx](https://github.com/vercel/styled-jsx), [styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components), and [emotion](https://github.com/vercel/next.js/tree/canary/examples/with-emotion).
+
+<p align="right"><a href=#topoftoc>Top</a></p>
 
 <div id='chapter3'/>
 
@@ -101,11 +117,11 @@ The `<Image>` Component is an extension of the HTML `<img>` tag, and comes with 
 
 Adding the `next/image` component to the `/app/page.tsx`:
 
-```typescript
+```ts
 import Image from "next/image";
 ```
 
-```typescript
+```ts
   <Image
     src="/hero-desktop.png"
     width={1000}
@@ -115,7 +131,7 @@ import Image from "next/image";
   />
 ```
 
-```typescript 
+```ts 
   <Image
     src="/hero-mobile.png"
     width={560}
@@ -124,3 +140,72 @@ import Image from "next/image";
     alt="Screenshots of the dashboard prjoject showing mobile version"
   />
 ```
+
+<div id="chapter4" />
+
+# Creating Layouts and Pages
+Topics we’ll cover:
+
+* Create the `dashboard` routes using file-system routing.
+* Understand the role of folders and files when creating new route segments.
+* Create a nested layout that can be shared between multiple dashboard pages.
+* Understand what colocation, partial rendering, and the root layout are.
+
+## Nested routing
+
+Next.js uses file-system routing where **folders** are used to create nested routes. **Each folder represents a route segment** that maps to a URL segment. 
+
+![Schema of folders representation in URL Segment](/public/docs/folders-to-url-segments.avif)
+
+You can create separate UIs for each route using `layout.tsx` and `page.tsx` files. 
+
+In addition, `page.tsx` is a **special Next.js file** that exports a React component, and **it's required for the route to be accessible**. For example, `/app/dashboard/page.tsx` is associated with the `/dashboard` path.
+
+## Creating the dashboard layout
+
+Next.js, you can use a special `layout.tsx` file to create UI that is shared between multiple pages. In our case, we create a `/dashboard` folder and we create inside a layout.tsx file. 
+We import the `<SideNav />` component into the layout. It'll be a part of layout. On the other part, we import a children prop. This child can either be a page or another layout. 
+
+One of benefits of using layouts on Next.js is that on navigation, **only the page components update while the layout won't re-render**. This is called [partial rendering](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#4-partial-rendering). Without partial rendering, each navigation would cause the full page to re-render on the client. Rendering only the segment that changes reduces the amount of data transferred and execution time, leading to improved performance.
+
+<div id="chapter5" />
+
+# Navigating between Pages
+Topics we’ll cover:
+
+* How to use the `next/link` component.
+* How to show an active link with the `usePathname()` hook.
+* How navigation works in Next.js.
+
+## The `<Link>` component
+
+In Next.js, you can use the `<Link />` Component to link between pages in your application. `<Link>` allows you to do [client-side navigation](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#how-routing-and-navigation-works) between routes. You should be able to navigate between the pages without seeing a full refresh. 
+
+You can import the `Link` component from `next/link`.
+
+## Automatic code-splitting and prefetching
+
+To improve the navigation experience, Next.js automatically code splits your application by route segments.
+
+Splitting code by routes means that pages become isolated which makes your application faster.
+
+In production environment, Next.js automatically prefetches the code for the linked route in the background. By the time the user clicks the link, the code for the destination page will already be loaded in the background, and this is what makes the page transition near-instant.
+
+## Pattern: Showing active links
+
+A common UI pattern is to show an active link to indicate to the user what page they are currently on. 
+
+To do this, you need to get the user's current path from the URL. Next.js provides a hook called [usePathname()](https://nextjs.org/docs/app/api-reference/functions/use-pathname) that you can use to check the path and implement this pattern.
+
+<div id="chapter6" />
+
+# Setting Up your Database
+
+In this chapter, we could learn how to push our project to GitHub and create a Vercel account. 
+
+Further more details here, in the [tutorial](https://nextjs.org/learn/dashboard-app/setting-up-your-database). :smile:
+
+<div id="chapter7" />
+
+# Fetching Data
+
