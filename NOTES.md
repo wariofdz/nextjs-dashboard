@@ -274,3 +274,132 @@ By using this pattern, you can:
 <div id="chapter8" />
 
 # 8. Static and Dynamic Rendering
+
+Topics we'll cover:
+
+* What static rendering is and how it can improve your application's performance.
+* What dynamic rendering is and when to use it.
+* Different approaches to make your dashboard dynamic.
+* Simulate a slow data fetch to see what happens.
+
+## What is Static Rendering?
+
+With **Static Rendering, <u>data fetching and rendering happens on the server at build time</u>** (when you deploy) or when revalidating data. There are some benefits of static rendering:
+
+1. **Faster Websites**. This ensures that users can access your website's content more quickly and reliably because there are prerender content and can distribute globally.
+2. **Reduced Server Load**. Because the content is cached, your server does not have to generate content for each user request. 
+3. **SEO**. Prerendered content is easier for search engines.
+
+It's useful for UI with **no data** or **data that is shared across users**, such as a static blog post or product page. In opposite, static rendering is not a good fit for showing
+the lastest changes in your dashboard because the application will not reflect the latest changes. 
+
+## What is Dynamic Rendering?
+
+With **Dynamic Rendering, <u>content is rendered on the server for each user at request time</u>** (when the user visits the page). There are some benefits of dynamic rendering:
+
+* **Real-Time Data**. Dynamic rendering allows your application to display real-time or frequently updated data. This is ideal for applications where data changes often.
+* **User-Specific Content**. It's easier to serve personalized content, such as dashboards or user profiles, and update the data based on user interaction.
+* **Request Time Information**. Dynamic rendering allows you to access information that can only be known at request time, such as cookies or the URL search parameters.
+
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
+
+<div id="chapter9" />
+
+# 9. Streaming
+Topics we'll cover:
+
+* What streaming is and when you might use it.
+* How to implement streaming with `loading.tsx` and Suspense.
+* What loading skeletons are.
+* What Next.js Route Groups are, and when you might use them.
+* Where to place React Suspense boundaries in your application.
+
+## What is Streaming?
+
+**Streaming** is a data transfer technique that allows you to break down a route into smaller *chunks* and progressively stream them from the server to the client as they become ready.
+
+You can prevent slow data requests from blocking your whole page. This allows the user to see and interact with parts of the page without waiting for all the data to load before any UI 
+can be shown to the user. Works perfect with React's component model because each component can be considered as a chunk.
+
+There are two ways you implement streaming in Next.js:
+
+1. At the page level, with the `loading.tsx` file (which creates `<Suspense>` for you).
+2. At the component level, with `<Suspense>` for more granular control.
+
+## Streaming a whole page with `loading.tsx`
+
+`loading.tsx` is a special Next.js file built on top of React Suspense. It allows you to create fallback UI to show as a replacement while page content loads.
+
+## Adding loading skeletons
+
+A loading skeleton is a simplified version of the UI. Many websites use them as a placeholder (or fallback) to indicate to users that the content is loading.
+
+## Route Groups
+
+A [**Route Groups**](https://nextjs.org/docs/app/building-your-application/routing/route-groups), allow you to organize files into logical groups without affecting the URL path structure. When you create a new folder using parentheses `()`, the name won't be included in the URL path. So `/dashboard/(overview)/page.tsx` becomes `/dashboard`. You need move your `loading.tsx` and `page.tsx` inside. 
+
+You're using a route group to ensure `loading.tsx` only applies to your dashboard overview page. However, you can also use route groups to separate your application into sections (e.g. `(marketing)` routes and `(shop)` routes) or by teams for larger applications.
+
+## Streaming a component
+
+We can also be more granular and stream specific components using **React Suspense**.
+
+`<Suspense>` allows you to defer rendering parts of your application until some condition is met (e.g. data is loaded). You can wrap your dynamic components in Suspense. Then, pass it a fallback component to show while the dynamic component loads.
+
+## Deciding where to place your Suspense boundaries
+
+Where you place your Suspense boundaries will depend on a few things:
+
+1. How you want the user to experience the page as it streams.
+2. What content you want to prioritize.
+3. If the components rely on data fetching.
+
+Where you place your suspense boundaries will vary depending on your application. In general, it's good practice to move your data fetches down to the components that need it, and then wrap those components in Suspense. But there is nothing wrong with streaming the sections or the whole page if that's what your application needs.
+
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
+
+<div id="chapter10" />
+
+# 10. Partial Prerendering (PPR)
+Topics we'll cover:
+
+* What Partial Prerendering is.
+* How Partial Prerendering works.
+
+**Partial Prerendering (PPR)** is an experimental feature introduced in Next.js 14 and new rendering model that allows you to combine the benefits of static and dynamic rendering in the same route. 
+
+## How does Partial Prerendering work?
+
+PPR uses React's [`Suspense`](https://react.dev/reference/react/Suspense) to defer rendering parts of your application until some condition is met (e.g. data is loaded).
+
+The Suspense fallback is embedded into the initial HTML file along with the static content. At build time (or during revalidation), the static content is **prerendered** to create a static shell. The rendering of dynamic content is **postponed** until the user requests the route.
+
+Wrapping a component in Suspense doesn't make the component itself dynamic, but rather <u>Suspense is used as a boundary between your static and dynamic code</u>.
+
+<p align="right"><a href=#topoftoc>Top</a> :arrow_up:</p>
+
+<div id="chapter11" />
+
+# 11. Adding Search and Pagination
+Topics we'll cover:
+
+* Learn how to use the Next.js APIs: `useSearchParams`, `usePathname`, and `useRouter`.
+* Implement search and pagination using URL search params. 
+
+## Why use URL search params?
+
+You'll be using URL search params to manage the search state. 
+
+There are some benefits to implement search with URL params:
+
+1. **Bookmarkable and shareable URLs**. User can bookmark the current state of the application, including queries and filters, for future reference or sharing.
+2. **Server-side rendering**. URL params can be directly consumed on the server to render the initial state.
+3. **Analytics and tracking**. Having search queries and filters directly in the URL makes it easier to track user behaviour without requiring additional client-side logic. 
+
+## Adding the search functionality
+
+There are the Next.js client hooks that you'll use to implement the search funcionality:
+
+* **`useSearchParams`** - Allows you to access the parameters of the current URL. Returning an object with the params and his values. E.g: { page: 1, query: 'pending' }
+* **`usePathname`** - Lets you read the current URL's pathname.
+* [**`useRouter`**](https://nextjs.org/docs/app/api-reference/functions/use-router#userouter) - Enables navigation between routes within client components programmatically.
