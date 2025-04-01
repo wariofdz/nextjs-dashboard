@@ -28,7 +28,7 @@
 # 1. Creating new project
 Recommending use pnpm. To create a new project, we set on the folder that we’d like to keep our project and execute the command `create-next-app`:
 
-```typescript 
+```ts 
 npx create-next-app@latest nextjs-dashboard --example "https://github.com/vercel/next-learn/tree/main/dashboard/starter-example" –use-pnpm
 ```
 
@@ -45,7 +45,7 @@ The folder structure is:
 
 ## Running development server
 Execute on a terminal: 
-```typescript 
+```ts 
 pnpm run dev 
 ``` 
 and Next.js runs development server on port **3000**.
@@ -403,3 +403,47 @@ There are the Next.js client hooks that you'll use to implement the search funci
 * **`useSearchParams`** - Allows you to access the parameters of the current URL. Returning an object with the params and his values. E.g: { page: 1, query: 'pending' }
 * **`usePathname`** - Lets you read the current URL's pathname.
 * [**`useRouter`**](https://nextjs.org/docs/app/api-reference/functions/use-router#userouter) - Enables navigation between routes within client components programmatically.
+
+Immediately, you'll see the steps to implement it. Further detail on the tutorial:
+
+### Capture the user's input
+
+In our example, you'll notice to use `_"use client"_`. This is a Client Component, **which means you can use event listeners and hooks**. We create a function to catch the changes when
+the input value changes. 
+
+```ts
+'use client';
+ 
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+ 
+export default function Search({ placeholder }: { placeholder: string }) {
+ `function handleSearch(term: string) {
+    console.log(term);
+  }`
+ 
+  return (
+    <div className="relative flex flex-1 flex-shrink-0">
+      <label htmlFor="search" className="sr-only">
+        Search
+      </label>
+      <input
+        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+        placeholder={placeholder}
+       `onChange={(e) => {
+          handleSearch(e.target.value);
+        }}`
+      />
+      <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+    </div>
+  );
+}
+```
+
+### Update the URL with the search params
+
+You use the `useSearchParams` hook from `next/navigation` and assign it to a variable. Inside the function above, we create a new variable with `URLSearchParams` instance.
+
+`URLSearchParams` is a Web API that provides utility methods for manipulating the URL query parameters. Instead of creating a complex string literal, you can use it to get the params string like 
+`?page=1&query=a`. Now, you can use Next.js's `useRouter` and `usePathname` hooks to update the URL. `useRouter` has a method `replace` to replace the pathname of URL.
+
+### Keeping the URL 
